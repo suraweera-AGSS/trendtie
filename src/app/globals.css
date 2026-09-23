@@ -1,0 +1,273 @@
+@import "tailwindcss";
+
+/* ============================================================
+   TRENDTIE — DESIGN TOKENS
+   ------------------------------------------------------------
+   Strict two-colour system: pure black (#000) + pure white (#fff).
+   Anything that reads as "grey" is black or white at reduced
+   alpha — never a third hue. Inverse tokens are for black
+   surfaces (footer, drawers, hover fills); put `surface-inverse`
+   on the wrapper so the focus ring flips with them.
+   ============================================================ */
+
+@theme {
+  /* ---- Core palette ---------------------------------------- */
+  --color-ink: #000000;
+  --color-paper: #ffffff;
+
+  /* ---- Derived alphas: text and lines on white surfaces ----- */
+  --color-muted: rgb(0 0 0 / 0.56);
+  --color-line: rgb(0 0 0 / 0.12);
+  --color-line-strong: rgb(0 0 0 / 0.28);
+  --color-wash: rgb(0 0 0 / 0.04);
+
+  /* ---- Derived alphas: on black surfaces -------------------- */
+  --color-muted-inverse: rgb(255 255 255 / 0.62);
+  --color-line-inverse: rgb(255 255 255 / 0.16);
+  --color-wash-inverse: rgb(255 255 255 / 0.08);
+
+  /* ---- Decorative only: too low-contrast for text -----------
+     `subtle` is 2.6:1 on white and `subtle-inverse` is 3.7:1 on
+     black, both below the WCAG AA 4.5:1 floor. Use them for
+     rules, ticks and disabled marks, never for words. Quiet text
+     uses `muted` (4.9:1) or `muted-inverse` (7.8:1). */
+  --color-subtle: rgb(0 0 0 / 0.36);
+  --color-subtle-inverse: rgb(255 255 255 / 0.4);
+
+  /* ---- Typography -------------------------------------------
+     Two faces. Archivo carries a width axis, so headings, nav,
+     buttons and labels run wide and bold like the drop posters.
+     Inter keeps product copy and forms comfortable to read. */
+  --font-sans:
+    var(--font-inter), "Helvetica Neue", Helvetica, Arial, ui-sans-serif,
+    system-ui, sans-serif;
+  --font-display:
+    var(--font-archivo), "Helvetica Neue", Helvetica, Arial, ui-sans-serif,
+    system-ui, sans-serif;
+
+  --text-display: clamp(3rem, 9vw, 8rem);
+  --text-display--line-height: 0.9;
+  --text-display--letter-spacing: -0.045em;
+  --text-display--font-weight: 700;
+
+  --text-hero: clamp(2.25rem, 5.5vw, 4.5rem);
+  --text-hero--line-height: 0.95;
+  --text-hero--letter-spacing: -0.035em;
+  --text-hero--font-weight: 700;
+
+  --text-title: clamp(1.5rem, 3vw, 2.25rem);
+  --text-title--line-height: 1.08;
+  --text-title--letter-spacing: -0.025em;
+  --text-title--font-weight: 600;
+
+  --text-eyebrow: 0.6875rem;
+  --text-eyebrow--line-height: 1;
+  --text-eyebrow--letter-spacing: 0.2em;
+  --text-eyebrow--font-weight: 500;
+
+  --tracking-brand: -0.04em;
+  --tracking-wide-caps: 0.18em;
+
+  /* ---- Layout ----------------------------------------------- */
+  --container-page: 90rem;
+  /* Named `measure`, not `prose`: Tailwind ships a hard-coded
+     max-w-prose (65ch) that shadows any --container-prose token. */
+  --container-measure: 44rem;
+
+  /* ---- Shape: minimalist, effectively square ----------------- */
+  --radius-none: 0px;
+  --radius-hair: 2px;
+
+  /* ---- Elevation: used sparingly, never decorative ----------- */
+  --shadow-lift: 0 1px 0 0 rgb(0 0 0 / 0.08);
+  --shadow-drawer: -24px 0 60px -30px rgb(0 0 0 / 0.35);
+
+  /* ---- Motion easing ---------------------------------------- */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-press: cubic-bezier(0.34, 1.4, 0.64, 1);
+
+  /* ---- Named animations -------------------------------------- */
+  --animate-fade-up: fade-up 0.6s var(--ease-out-soft) both;
+  --animate-fade-in: fade-in 0.4s var(--ease-out-soft) both;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 1rem, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+/* Duration scale. Tailwind has no --duration-* theme namespace, so these
+   live on :root and are consumed as duration-(--duration-quick) in markup.
+   src/lib/motion.ts mirrors these numbers for Framer Motion. */
+:root {
+  --duration-instant: 120ms;
+  --duration-quick: 200ms;
+  --duration-base: 320ms;
+  --duration-slow: 600ms;
+  --duration-slower: 900ms;
+
+  --header-height: 4rem;
+
+  /* The focus ring tracks the SURFACE, not the element's own text colour.
+     currentColor would make the ring vanish on inverted elements such as
+     the black primary button sitting on a white page. */
+  --focus-ring: var(--color-ink);
+
+  /* Width axis setting for the Archivo display face. */
+  --display-width: 112%;
+}
+
+@media (min-width: 48rem) {
+  :root {
+    --header-height: 5rem;
+  }
+}
+
+/* ============================================================
+   BASE
+   ============================================================ */
+
+@layer base {
+  * {
+    border-color: var(--color-line);
+  }
+
+  html {
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+    scroll-padding-top: var(--header-height);
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: var(--color-ink);
+    color: var(--color-paper);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 3px;
+  }
+
+  /* Headings run in the wide display face by default. */
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-stretch: var(--display-width);
+    text-wrap: balance;
+  }
+
+  /* Minimal scrollbar that stays inside the two-colour system. */
+  @supports (scrollbar-width: thin) {
+    html {
+      scrollbar-width: thin;
+      scrollbar-color: var(--color-line-strong) transparent;
+    }
+  }
+}
+
+/* Honour reduced-motion at the platform level. Framer Motion reads the
+   same preference via useReducedMotion for JS-driven animation. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================
+   CUSTOM UTILITIES
+   ============================================================ */
+
+/* Black section: pairs the inverse colours with a white focus ring. */
+@utility surface-inverse {
+  background-color: var(--color-ink);
+  color: var(--color-paper);
+  --focus-ring: var(--color-paper);
+}
+
+/* Wide display face for non-heading brand type: nav, buttons, labels. */
+@utility type-wide {
+  font-family: var(--font-display);
+  font-stretch: var(--display-width);
+}
+
+/* Eyebrow / kicker label: small, uppercase, wide-tracked display face. */
+@utility eyebrow {
+  font-family: var(--font-display);
+  font-stretch: var(--display-width);
+  font-size: var(--text-eyebrow);
+  line-height: var(--text-eyebrow--line-height);
+  letter-spacing: var(--text-eyebrow--letter-spacing);
+  font-weight: var(--text-eyebrow--font-weight);
+  text-transform: uppercase;
+}
+
+/* Underline that draws in from the left on hover/focus. */
+@utility underline-draw {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -0.15em;
+    height: 1px;
+    width: 100%;
+    background-color: currentColor;
+    transform: scaleX(0);
+    transform-origin: right center;
+    transition: transform var(--duration-base) var(--ease-out-soft);
+  }
+
+  &:hover::after,
+  &:focus-visible::after {
+    transform: scaleX(1);
+    transform-origin: left center;
+  }
+}
+
+/* Page gutters — one source of truth for horizontal rhythm. */
+@utility page-gutter {
+  padding-inline: 1.25rem;
+
+  @media (min-width: 40rem) {
+    padding-inline: 2rem;
+  }
+
+  @media (min-width: 64rem) {
+    padding-inline: 3rem;
+  }
+}
