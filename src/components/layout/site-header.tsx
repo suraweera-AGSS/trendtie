@@ -7,11 +7,13 @@ import { Logo } from "@/components/ui/logo";
 import { Container } from "@/components/ui/container";
 import { primaryNav } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
+import { useCart } from "@/components/cart/cart-provider";
 
 export function SiteHeader() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [lastPathname, setLastPathname] = useState(pathname);
+  const { count } = useCart();
 
   // Close the mobile panel whenever the route changes. Adjusting state during
   // render is React's recommended reset pattern and avoids the extra commit a
@@ -67,7 +69,7 @@ export function SiteHeader() {
             href="/cart"
             className="type-wide text-xs font-medium tracking-wide-caps uppercase underline-draw"
           >
-            Cart (0)
+            Cart ({count})
           </Link>
 
           <button

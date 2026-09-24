@@ -13,6 +13,17 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
   ]),
+  {
+    // Operational scripts assert against live HTTP responses, whose shape is
+    // genuinely unknown until runtime. Requiring a declared type for every
+    // response body here would mean maintaining a second copy of the API
+    // contract inside the tests, which is exactly what the tests exist to
+    // check. Application code keeps the strict rule.
+    files: ["scripts/**/*.ts"],
+    rules: {
+      "@typescript-eslint/no-explicit-any": "off",
+    },
+  },
 ]);
 
 export default eslintConfig;

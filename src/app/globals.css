@@ -69,6 +69,22 @@
   --tracking-wide-caps: 0.18em;
 
   /* ---- Layout ----------------------------------------------- */
+  /* ---- Data visualisation -------------------------------------------
+     An ordinal ramp for charts, used only where a scale is genuinely
+     ordered (the order lifecycle, tiers). Nominal categories such as
+     product names all take `ink`: shading them by value would double-encode
+     bar length as darkness, which says nothing the length has not said.
+
+     These are black at reduced alpha, not new hues. On white they resolve
+     to #000000, #474747, #858585 and #b3b3b3, which pass the ordinal
+     checks: monotone lightness, adjacent steps far enough apart to read,
+     and a light end at 2.04:1 against the surface. Do not lighten step 4
+     further or the faintest bar stops being visible. */
+  --color-ramp-1: rgb(0 0 0 / 1);
+  --color-ramp-2: rgb(0 0 0 / 0.72);
+  --color-ramp-3: rgb(0 0 0 / 0.48);
+  --color-ramp-4: rgb(0 0 0 / 0.3);
+
   --container-page: 90rem;
   /* Named `measure`, not `prose`: Tailwind ships a hard-coded
      max-w-prose (65ch) that shadows any --container-prose token. */

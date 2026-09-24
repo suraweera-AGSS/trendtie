@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Archivo, Inter } from "next/font/google";
-import { SiteHeader } from "@/components/layout/site-header";
-import { SiteFooter } from "@/components/layout/site-footer";
+import { Providers } from "@/components/providers";
 import { siteConfig } from "@/lib/site-config";
 import "./globals.css";
 
@@ -74,17 +73,16 @@ export default function RootLayout({
       className={`${inter.variable} ${archivo.variable} h-full`}
     >
       <body className="flex min-h-full flex-col antialiased">
+        <noscript>
+          <style>{`[data-reveal]{opacity:1!important;transform:none!important}`}</style>
+        </noscript>
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-100 focus:bg-ink focus:px-4 focus:py-2 focus:text-xs focus:tracking-wide-caps focus:text-paper focus:uppercase"
         >
           Skip to content
         </a>
-        <SiteHeader />
-        <main id="main-content" className="flex-1">
-          {children}
-        </main>
-        <SiteFooter />
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

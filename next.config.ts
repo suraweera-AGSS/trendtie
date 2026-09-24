@@ -16,6 +16,12 @@ const nextConfig: NextConfig = {
     qualities: [75, 90],
   },
   typedRoutes: true,
+
+  // Mongoose resolves several of its internals through dynamic require calls
+  // that a bundler cannot follow, which fails the Turbopack build. Marking it
+  // external leaves it to Node's own require at runtime, which is how the
+  // driver expects to be loaded anyway.
+  serverExternalPackages: ["mongoose"],
 };
 
 export default nextConfig;

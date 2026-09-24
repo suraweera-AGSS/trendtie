@@ -42,3 +42,11 @@ next-env.d.ts
 
 # keep the template for contributors
 !.env.example
+
+# stray credential dumps (.env* does not match files like atlas-credentials.env)
+*.env
+*credential*
+*secret*
+
+# ui test screenshots
+.screenshots/

@@ -50,3 +50,17 @@ export type Size = (typeof SIZES)[number];
 
 export const CATEGORIES = ["tees", "hoodies", "caps", "accessories"] as const;
 export type Category = (typeof CATEGORIES)[number];
+
+/**
+ * Order lifecycle. Declared here rather than in the Mongoose model so that
+ * client components can import it without dragging the database driver into
+ * the browser bundle.
+ */
+export const ORDER_STATUSES = [
+  "pending",
+  "shipped",
+  "delivered",
+  "cancelled",
+] as const;
+
+export type OrderStatus = (typeof ORDER_STATUSES)[number];
